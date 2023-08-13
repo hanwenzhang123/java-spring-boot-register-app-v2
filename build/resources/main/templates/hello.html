@@ -40,13 +40,13 @@
             <tr><th>Id</th><th>Name</th><th>Advisor</th></tr>
             </thead>
             <tbody>
-            <tr ng-repeat="team in departmentCourses">
+            <tr ng-repeat="course in departmentCourses">
                 <td>
-                    <a href='/team/{{team.id}}' target=_blank>
-                        {{team.id}}</a>
+                    <a href='/course/{{course.id}}' target=_blank>
+                        {{course.id}}</a>
                 </td>
-                <td>{{team.name}}</td>
-                <td>{{team.advisor}}</td>
+                <td>{{course.name}}</td>
+                <td>{{course.advisor}}</td>
             </tr>
             </tbody>
         </table>
@@ -82,13 +82,13 @@
         <tr><th>Id</th><th>Name</th><th>Advisor</th></tr>
         </thead>
         <tbody>
-        <tr ng-repeat="team in courses">
+        <tr ng-repeat="course in courses">
             <td>
-                <a href='/team/{{team.id}}' target=_blank>
-                    {{team.id}}</a>
+                <a href='/course/{{course.id}}' target=_blank>
+                    {{course.id}}</a>
             </td>
-            <td>{{team.name}}</td>
-            <td>{{team.advisor}}</td>
+            <td>{{course.name}}</td>
+            <td>{{course.advisor}}</td>
         </tr>
         </tbody>
     </table>
