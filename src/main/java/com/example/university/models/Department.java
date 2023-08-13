@@ -64,16 +64,16 @@ public class Department {
         this.courses = courses;
     }
 
-    public void addCourse(Course team) {
+    public void addCourse(Course course) {
         if (this.getCourses() == null) {
             this.courses = new HashSet<>();
         }
         this.getCourses()
-            .add(team);
+            .add(course);
     }
 
-    public void dropCourse(Course team) {
+    public void dropCourse(Course course) {
         this.getCourses()
-            .remove(team);
+            .remove(course);
     }
 }

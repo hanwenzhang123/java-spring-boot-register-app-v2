@@ -12,7 +12,7 @@ public interface IRoster {
 
         void addStudent(
                 String studentId,
-                String teamId);
+                String courseId);
 
         void createDepartment(DepartmentDetails DepartmentDetails);
 
@@ -28,7 +28,7 @@ public interface IRoster {
 
         void dropStudent(
                 String studentId,
-                String teamId);
+                String courseId);
 
         List<DepartmentDetails> getAllDepartments();
 
@@ -60,11 +60,11 @@ public interface IRoster {
 
         List<StudentDetails> getStudentsNotOnCourse();
 
-        List<StudentDetails> getStudentsOfCourse(String teamId);
+        List<StudentDetails> getStudentsOfCourse(String courseId);
 
         List<String> getChairmansOfStudent(String studentId);
 
-        CourseDetails getCourseDetails(String teamId);
+        CourseDetails getCourseDetails(String courseId);
 
         List<CourseDetails> getCoursesOfDepartment(String departmentId);
 
@@ -72,6 +72,6 @@ public interface IRoster {
 
         void removeStudent(String studentId);
 
-        void removeCourse(String teamId);
+        void removeCourse(String courseId);
 
 }

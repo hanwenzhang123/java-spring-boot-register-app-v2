@@ -27,7 +27,6 @@ public class CourseDetails {
     }
 
     public String toString() {
-
         return id + " " + name + ": " + advisor;
     }
 }

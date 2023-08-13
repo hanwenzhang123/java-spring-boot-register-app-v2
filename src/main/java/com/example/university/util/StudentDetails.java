@@ -34,8 +34,6 @@ public class StudentDetails  {
     }
 
     public String toString() {
-        String s = id + " " + name + " working on " + thesis + " with gpa " + gpa;
-
-        return s;
+        return id + " " + name + " working on " + thesis + " with gpa " + gpa;
     }
 }

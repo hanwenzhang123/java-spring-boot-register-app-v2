@@ -1,8 +1,10 @@
 package com.example.university.controllers;
 
 import com.example.university.services.RosterDAOService;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -25,8 +27,18 @@ public class RosterRestController {
         return "Welcome to the Application!";
     }
 
+    @DeleteMapping("/delete")
+    public String deleteAllData() {
+        service.dropAllDepartments();
+        service.dropAllStudents();
+        service.dropAllCourses();
+        return "All data deleted";
+    }
+
     @GetMapping("/init")
-    public String myinit() {
+    public String dataInit() {
+        // Delete all current data
+
 
         // Departments
         service.createDepartment(new DepartmentDetails("bscs", "Bachelor in Computer Science", "Dr. John"));
@@ -227,14 +239,14 @@ public class RosterRestController {
         return service.getCoursesOfDepartment(departmentId);
     }
 
-    @GetMapping("/team/{teamId}")
-    public CourseDetails myCourse(@PathVariable String teamId) {
-        return service.getCourseDetails(teamId);
+    @GetMapping("/course/{courseId}")
+    public CourseDetails myCourse(@PathVariable String courseId) {
+        return service.getCourseDetails(courseId);
     }
 
-    @GetMapping("/team-students/{teamId}")
-    public List<StudentDetails> myCourseStudents(@PathVariable String teamId) {
-        return service.getStudentsOfCourse(teamId);
+    @GetMapping("/course-students/{courseId}")
+    public List<StudentDetails> myCourseStudents(@PathVariable String courseId) {
+        return service.getStudentsOfCourse(courseId);
     }
 
 

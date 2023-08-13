@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class RosterDAOService implements IRoster {
 
     @PersistenceContext
-    private EntityManager em;
+    private EntityManager entityManager;
 
     public RosterDAOService() {
         super();
@@ -36,14 +36,14 @@ public class RosterDAOService implements IRoster {
                 DepartmentDetails.getName(),
                 DepartmentDetails.getChairman());
 
-        em.persist(department);
+        entityManager.persist(department);
     }
 
     public List<DepartmentDetails> getAllDepartments() {
 
         List<Department> departments;
 
-        departments = (List<Department>) em.createNamedQuery(
+        departments = (List<Department>) entityManager.createNamedQuery(
                         "roster.entity.Department.findAllDepartments")
                 .getResultList();
 
@@ -51,15 +51,15 @@ public class RosterDAOService implements IRoster {
     }
 
     public void createCourseInDepartment(CourseDetails CourseDetails, String departmentId) {
-        Department department = em.find(Department.class, departmentId);
+        Department department = entityManager.find(Department.class, departmentId);
         if (department != null) {
-            Course team = new Course(
+            Course course = new Course(
                     CourseDetails.getId(),
                     CourseDetails.getName(),
                     CourseDetails.getAdvisor());
-            em.persist(team);
-            team.setDepartment(department);
-            department.addCourse(team);
+            entityManager.persist(course);
+            course.setDepartment(department);
+            department.addCourse(course);
         }
 
     }
@@ -67,13 +67,13 @@ public class RosterDAOService implements IRoster {
     public List<CourseDetails> getCoursesOfDepartment(String departmentId) {
         List<CourseDetails> detailsList = new ArrayList<CourseDetails>();
 
-        Department department = em.find(Department.class, departmentId);
+        Department department = entityManager.find(Department.class, departmentId);
         if (department != null) {
-            for (Course team : department.getCourses()) {
+            for (Course course : department.getCourses()) {
                 CourseDetails CourseDetails = new CourseDetails(
-                        team.getId(),
-                        team.getName(),
-                        team.getAdvisor());
+                        course.getId(),
+                        course.getName(),
+                        course.getAdvisor());
                 detailsList.add(CourseDetails);
             }
         }
@@ -85,7 +85,7 @@ public class RosterDAOService implements IRoster {
 
         List<Course> courses;
 
-        courses = (List<Course>) em.createNamedQuery(
+        courses = (List<Course>) entityManager.createNamedQuery(
                         "roster.entity.Course.findAllCourses")
                 .getResultList();
 
@@ -94,25 +94,25 @@ public class RosterDAOService implements IRoster {
 
     public void createStudent(String id, String name, String thesis, double gpa) {
         Student student = new Student(id, name, thesis, gpa);
-        em.persist(student);
+        entityManager.persist(student);
     }
 
 
-    public void addStudent(String studentId, String teamId) {
-        Student student = em.find(Student.class, studentId);
-        Course team = em.find(Course.class, teamId);
+    public void addStudent(String studentId, String courseId) {
+        Student student = entityManager.find(Student.class, studentId);
+        Course course = entityManager.find(Course.class, courseId);
 
-        if ((student != null) && (team != null)) {
-            team.addStudent(student);
+        if ((student != null) && (course != null)) {
+            course.addStudent(student);
         }
     }
 
 
-    public void dropStudent(String studentId, String teamId) {
-        Student student = em.find(Student.class, studentId);
-        Course team = em.find(Course.class, teamId);
-        if ((student != null) && (team != null)) {
-            team.dropStudent(student);
+    public void dropStudent(String studentId, String courseId) {
+        Student student = entityManager.find(Student.class, studentId);
+        Course course = entityManager.find(Course.class, courseId);
+        if ((student != null) && (course != null)) {
+            course.dropStudent(student);
         }
     }
 
@@ -120,7 +120,7 @@ public class RosterDAOService implements IRoster {
 
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findAllStudents")
                 .getResultList();
 
@@ -130,7 +130,7 @@ public class RosterDAOService implements IRoster {
     public DepartmentDetails getDepartmentDetails(String departmentId) {
 
         DepartmentDetails DepartmentDetails = null;
-        Department department = em.find(Department.class, departmentId);
+        Department department = entityManager.find(Department.class, departmentId);
         if (department != null) {
             DepartmentDetails = new DepartmentDetails(
                     department.getId(),
@@ -144,10 +144,10 @@ public class RosterDAOService implements IRoster {
 
         List<DepartmentDetails> detailsList = new ArrayList<DepartmentDetails>();
         List<Department> departments = null;
-        Student student = em.find(Student.class, studentId);
+        Student student = entityManager.find(Student.class, studentId);
 
         if (student != null) {
-            departments = (List<Department>) em.createNamedQuery(
+            departments = (List<Department>) entityManager.createNamedQuery(
                             "roster.entity.Student.findDepartmentsByStudent")
                     .setParameter("student", student)
                     .getResultList();
@@ -168,7 +168,7 @@ public class RosterDAOService implements IRoster {
 
         StudentDetails StudentDetails = null;
 
-        Student student = em.find(Student.class, studentId);
+        Student student = entityManager.find(Student.class, studentId);
 
         if (student != null) {
             StudentDetails = new StudentDetails(
@@ -184,7 +184,7 @@ public class RosterDAOService implements IRoster {
     public List<StudentDetails> getStudentsByAdvisor(String advisor) {
 
         List<Student> students = null;
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsByAdvisor")
                 .setParameter("advisor", advisor)
                 .getResultList();
@@ -196,7 +196,7 @@ public class RosterDAOService implements IRoster {
 
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsByHigherGpa")
                 .setParameter("name", name)
                 .getResultList();
@@ -207,9 +207,9 @@ public class RosterDAOService implements IRoster {
     public List<StudentDetails> getStudentsByDepartmentId(String departmentId) {
 
         List<Student> students = null;
-        Department department = em.find(Department.class, departmentId);
+        Department department = entityManager.find(Department.class, departmentId);
         if (department != null) {
-            students = (List<Student>) em.createNamedQuery(
+            students = (List<Student>) entityManager.createNamedQuery(
                             "roster.entity.Student.findStudentsByDepartment")
                     .setParameter("department", department)
                     .getResultList();
@@ -222,7 +222,7 @@ public class RosterDAOService implements IRoster {
 
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsByThesis")
                 .setParameter("thesis", thesis)
                 .getResultList();
@@ -233,7 +233,7 @@ public class RosterDAOService implements IRoster {
     public List<StudentDetails> getStudentsByThesisAndName(String thesis, String name) {
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsByThesisAndName")
                 .setParameter("name", name)
                 .setParameter("thesis", thesis)
@@ -246,7 +246,7 @@ public class RosterDAOService implements IRoster {
     public List<StudentDetails> getStudentsByGpaRange(double low, double high) {
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsByGpaRange")
                 .setParameter("lowerGpa", low)
                 .setParameter("higherGpa", high)
@@ -258,7 +258,7 @@ public class RosterDAOService implements IRoster {
     public List<StudentDetails> getStudentsByChairman(String chairman) {
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsByChairman")
                 .setParameter("chairman", chairman)
                 .getResultList();
@@ -270,20 +270,20 @@ public class RosterDAOService implements IRoster {
     public List<StudentDetails> getStudentsNotOnCourse() {
         List<Student> students = null;
 
-        students = (List<Student>) em.createNamedQuery(
+        students = (List<Student>) entityManager.createNamedQuery(
                         "roster.entity.Student.findStudentsNotOnCourse")
                 .getResultList();
 
         return copyStudentsToDetails(students);
     }
 
-    public List<StudentDetails> getStudentsOfCourse(String teamId) {
+    public List<StudentDetails> getStudentsOfCourse(String courseId) {
         List<StudentDetails> studentList = null;
-        Course team = em.find(Course.class, teamId);
+        Course course = entityManager.find(Course.class, courseId);
 
-        if (team != null) {
+        if (course != null) {
             studentList = this.copyStudentsToDetails(
-                    (List<Student>) team.getStudents());
+                    (List<Student>) course.getStudents());
         }
 
         return studentList;
@@ -294,9 +294,9 @@ public class RosterDAOService implements IRoster {
         List<String> chairmansList = new ArrayList<String>();
         List<String> chairmans = null;
 
-        Student student = em.find(Student.class, studentId);
+        Student student = entityManager.find(Student.class, studentId);
         if (student != null) {
-            chairmans = (List<String>) em.createNamedQuery(
+            chairmans = (List<String>) entityManager.createNamedQuery(
                             "roster.entity.Student.findChairmansByStudent")
                     .setParameter("studentId", studentId)
                     .getResultList();
@@ -312,15 +312,15 @@ public class RosterDAOService implements IRoster {
 
     }
 
-    public CourseDetails getCourseDetails(String teamId) {
+    public CourseDetails getCourseDetails(String courseId) {
         CourseDetails CourseDetails = null;
 
-        Course team = em.find(Course.class, teamId);
-        if (team != null) {
+        Course course = entityManager.find(Course.class, courseId);
+        if (course != null) {
             CourseDetails = new CourseDetails(
-                    team.getId(),
-                    team.getName(),
-                    team.getAdvisor());
+                    course.getId(),
+                    course.getName(),
+                    course.getAdvisor());
         }
 
         return CourseDetails;
@@ -328,21 +328,33 @@ public class RosterDAOService implements IRoster {
 
 
     public void removeDepartment(String departmentId) {
-        Department department = em.find(Department.class, departmentId);
+        Department department = entityManager.find(Department.class, departmentId);
         if (department != null)
-            em.remove(department);
+            entityManager.remove(department);
     }
 
     public void removeStudent(String studentId) {
-        Student student = em.find(Student.class, studentId);
+        Student student = entityManager.find(Student.class, studentId);
         if (student != null)
-            em.remove(student);
+            entityManager.remove(student);
     }
 
-    public void removeCourse(String teamId) {
-        Course team = em.find(Course.class, teamId);
-        if (team != null)
-            em.remove(team);
+    public void removeCourse(String courseId) {
+        Course course = entityManager.find(Course.class, courseId);
+        if (course != null)
+            entityManager.remove(course);
+    }
+
+    public void dropAllDepartments() {
+        entityManager.createQuery("DELETE FROM Department").executeUpdate();
+    }
+
+    public void dropAllStudents() {
+        entityManager.createQuery("DELETE FROM Student").executeUpdate();
+    }
+
+    public void dropAllCourses() {
+        entityManager.createQuery("DELETE FROM Course").executeUpdate();
     }
 
     private List<DepartmentDetails> copyDepartmentsToDetails(List<Department> departments) {
@@ -383,11 +395,11 @@ public class RosterDAOService implements IRoster {
         List<CourseDetails> detailsList = new ArrayList<CourseDetails>();
 
         if (courses != null) {
-            for (Course team : courses) {
+            for (Course course : courses) {
                 CourseDetails CourseDetails = new CourseDetails(
-                        team.getId(),
-                        team.getName(),
-                        team.getAdvisor()
+                        course.getId(),
+                        course.getName(),
+                        course.getAdvisor()
                 );
                 detailsList.add(CourseDetails);
             }
